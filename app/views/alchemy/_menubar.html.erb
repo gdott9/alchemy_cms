@@ -112,22 +112,24 @@
     </template>
 
     <script type="module">
-      class Menubar extends HTMLElement {
-        constructor() {
-          super()
-          const template = this.querySelector("template")
-          const attachedShadowRoot = this.attachShadow({ mode: "open" })
-          attachedShadowRoot.appendChild(template.content.cloneNode(true))
+      if (customElements.get('alchemy-menubar') === undefined) {
+        class Menubar extends HTMLElement {
+          constructor() {
+            super()
+            const template = this.querySelector("template")
+            const attachedShadowRoot = this.attachShadow({ mode: "open" })
+            attachedShadowRoot.appendChild(template.content.cloneNode(true))
+          }
+
+          connectedCallback() {
+            const bar = this.shadowRoot.querySelector(".menubar")
+            const width = bar.offsetWidth
+            bar.style = `--panel-width: ${width}px; --left-offset: calc(var(--icon-size) + 32px);`
+          }
         }
 
-        connectedCallback() {
-          const bar = this.shadowRoot.querySelector(".menubar")
-          const width = bar.offsetWidth
-          bar.style = `--panel-width: ${width}px; --left-offset: calc(var(--icon-size) + 32px);`
-        }
+        customElements.define("alchemy-menubar", Menubar)
       }
-
-      customElements.define("alchemy-menubar", Menubar)
     </script>
   </alchemy-menubar>
 <% end %>
